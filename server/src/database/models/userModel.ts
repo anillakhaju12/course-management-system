@@ -1,5 +1,6 @@
 
 import {Table, Model, Column, DataType} from 'sequelize-typescript'
+import {v4 as uuidv4} from 'uuid'
 
 @Table({
   tableName : "users", // name of the table
@@ -12,7 +13,8 @@ class User extends Model{
   @Column({
     primaryKey : true,
     type : DataType.UUID,
-    defaultValue : DataType.UUIDV4
+    defaultValue : ()=> uuidv4(),
+    allowNull : false
   })
   declare id : string
 
@@ -38,6 +40,8 @@ class User extends Model{
   declare role : string 
 
 }
+
+
 
 
 
