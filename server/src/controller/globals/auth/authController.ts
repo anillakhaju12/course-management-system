@@ -1,11 +1,18 @@
 
 import type {Request,Response} from "express"
 import User from "../../../database/models/userModel.js"
+import bcrypt from 'bcrypt'
 
 class AuthController{
   
   async registerUser(req: Request, res:Response){
     try{
+
+      if(req.body === undefined){
+        return res.status(400).json({
+          "message" : "please send some data"
+        })
+      }
       const {username, email, password} = req.body
       if(!username || !email || !password){
         return res.status(400).json({
@@ -17,13 +24,32 @@ class AuthController{
       await User.create({
         username,
         email,
-        password
+        password : bcrypt.hashSync(password, 12)
       })
       return res.status(201).json({
         "message" : "Data inserted successfully"
       })
     }
     catch(err){
+      console.log(err)
+      return res.status(500).json({
+        "message" : "something went wrong. Please try later!!"
+      })
+    }
+  }
+
+  async loginUser(req: Request, res: Response){
+    try{
+      if(req.body === undefined){
+        return res.status(400).json({
+          "message" : "please send some data"
+        })
+      }
+      const{email, password} = req.body
+      
+
+
+    }catch(err){
       console.log(err)
       return res.status(500).json({
         "message" : "something went wrong. Please try later!!"
