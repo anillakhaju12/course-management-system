@@ -2,6 +2,7 @@
 import type {Request,Response} from "express"
 import User from "../../../database/models/userModel.js"
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 class AuthController{
   
@@ -57,15 +58,17 @@ class AuthController{
         email
       }})
 
+      
       if(!user){
         return res.status(404).json({
           "message" : "User not registered"
         })
       }
+      const token = jwt.sign({id : user.id},"hithisissecretkey",{expiresIn: "90d"})
       const isPassword = bcrypt.compareSync(password, user.password)
       if(isPassword){
           return res.status(201).json({
-          "message" : "Login successfully"
+          "token" : token
         })
       }else{
         return res.status(400).json({
