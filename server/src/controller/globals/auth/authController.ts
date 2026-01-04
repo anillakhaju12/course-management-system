@@ -46,6 +46,32 @@ class AuthController{
         })
       }
       const{email, password} = req.body
+      if(!email || !password){
+        return res.status(404).json({
+          "message" : "Please provide all the data"
+        })
+
+      }
+
+      const user = await User.findOne({where: {
+        email
+      }})
+
+      if(!user){
+        return res.status(404).json({
+          "message" : "User not registered"
+        })
+      }
+      const isPassword = bcrypt.compareSync(password, user.password)
+      if(isPassword){
+          return res.status(201).json({
+          "message" : "Login successfully"
+        })
+      }else{
+        return res.status(400).json({
+          "message" : "Incorrect password"
+        })
+      }
       
 
 
