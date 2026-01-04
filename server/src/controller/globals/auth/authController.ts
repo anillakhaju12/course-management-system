@@ -55,7 +55,7 @@ class AuthController{
       }
 
       const user = await User.findOne({where: {
-        email
+        email : email
       }})
 
       
@@ -67,8 +67,9 @@ class AuthController{
       const token = jwt.sign({id : user.id},"hithisissecretkey",{expiresIn: "90d"})
       const isPassword = bcrypt.compareSync(password, user.password)
       if(isPassword){
-          return res.status(201).json({
-          "token" : token
+          return res.status(200).json({
+            "message" : "login successfully",
+            "token" : token
         })
       }else{
         return res.status(400).json({
