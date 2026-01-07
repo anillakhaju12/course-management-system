@@ -1,9 +1,21 @@
 import type { Request, Response } from "express";
 import sequelize from "../../database/connection.js";
 import instituteRandomNumberGenerator from "../../service/instituteRandomNumberGenerator.js";
+
+interface ExtendRequest extends Request{
+  userData? : {
+    username : string,
+    email : string,
+    role : string
+  }
+}
+
+
 class InstituteController{
-  async createInstitute(req: Request ,res: Response){
+  async createInstitute(req: ExtendRequest ,res: Response){
     try{
+
+      console.log(req.userData)
       const {instituteName, instituteEmail, institutePhoneNumber, instituteAddress} = req.body
       const {institutePanNumber = null, instituteVatNumber = null} = req.body
       const instituteRandomNumber = instituteRandomNumberGenerator() 

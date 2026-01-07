@@ -14,7 +14,7 @@ class User extends Model{
     primaryKey : true,
     type : DataType.UUID,
     defaultValue : ()=> uuidv4(),
-    allowNull : false
+    allowNull : false 
   })
   declare id : string
 
