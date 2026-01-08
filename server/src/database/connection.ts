@@ -37,7 +37,7 @@ sequelize.authenticate().then(()=>{
 })
 
 //migrating table
-sequelize.sync({force:false}).then(()=>{
+sequelize.sync({alter:false}).then(()=>{
   console.log("Migration succcessful")
 }).catch( err =>{
   console.log(`Error : ${err}`)

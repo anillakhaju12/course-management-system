@@ -1,15 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from 'jsonwebtoken'
 import User from "../database/models/userModel.js";
+import type { ExtendRequest } from "./extendRequest.js";
 
 
-interface ExtendRequest extends Request{
-  userData ?: {
-    username : string,
-    email : string,
-    role : string
-  }
-}
 
 class Middleware{
   async isloggedIn(req : ExtendRequest, res : Response, next : NextFunction){
