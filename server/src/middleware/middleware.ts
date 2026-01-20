@@ -28,7 +28,10 @@ class Middleware{
             "message" : "Unknown users id"
           })
         }
-        req.userData = user
+        req.userData = {
+          id: user.id,
+          instituteNumber: user.currentInstituteNumber
+        }
         next()
       }
     })

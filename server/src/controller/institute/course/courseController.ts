@@ -1,4 +1,4 @@
-import type { Response } from "express";
+import type { NextFunction, Response } from "express";
 import type { ExtendRequest } from "../../../middleware/extendRequest.js";
 import sequelize from "../../../database/connection.js";
 
@@ -6,16 +6,19 @@ import sequelize from "../../../database/connection.js";
 const createCourse = async (req : ExtendRequest, res : Response)=>{
   const {courseName, coursePrice, courseDuration, courseLevel, courseDescription} = req.body
   const instituteNumber = req.userData?.instituteNumber
+  const courseThumbnail = req.file?.path
+  console.log(req.file)
 
   if(!courseName || !coursePrice || !courseDuration || !courseLevel || !courseDescription){
     return res.status(401).json({
       "message" : "Please send courseName, coursePrice, courseDuration, courseLevel, courseDescription"
     })
   }
+  console.log(instituteNumber)
   
   await sequelize.query(`INSERT INTO course_${instituteNumber}(
-    courseName, coursePrice, courseDuration, courseLevel, courseDescription) VALUES (?,?,?,?,?)`, {
-      replacements: [courseName, coursePrice, courseDuration, courseLevel, courseDescription]
+    courseName, coursePrice, courseDuration, courseLevel, courseDescription, courseThumbnail) VALUES (?,?,?,?,?,?)`, {
+      replacements: [courseName, coursePrice, courseDuration, courseLevel, courseDescription, courseThumbnail]
     }).then(()=>{
       res.status(200).json({
         "message" : "Course added successfully"
