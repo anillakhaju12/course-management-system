@@ -3,6 +3,7 @@ import envConfig from './config/configEnv.js'
 import './database/connection.js'
 import authRouter from './router/globals/auth/authRouter.js'
 import instituteRouter from './router/institute/instituteRouter.js'
+import courseRouter from './router/institute/course/courseRouter.js'
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.use(express.json())
 app.use('/api',authRouter)
 
 app.use('/api',instituteRouter)
+app.use('/api', courseRouter)
 
 function startServer(){
   app.listen(port, ()=>{

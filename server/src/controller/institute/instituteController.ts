@@ -7,7 +7,7 @@ import User from "../../database/models/userModel.js";
 
 
 class InstituteController{
-  async createInstitute(req: ExtendRequest ,res: Response, next: NextFunction){
+  async createInstituteTable(req: ExtendRequest ,res: Response, next: NextFunction){
     try{
       const {instituteName, instituteEmail, institutePhoneNumber, instituteAddress} = req.body
       const {institutePanNumber = null, instituteVatNumber = null} = req.body
@@ -44,14 +44,13 @@ class InstituteController{
       await sequelize.query(`CREATE TABLE IF NOT EXISTS user_institute(
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         userId VARCHAR(255) REFERENCES users(id),
-        instituteNumber INT
+        instituteNumber INT  NOT NULL
         )`) 
 
         await sequelize.query(`INSERT INTO  user_institute(userId, instituteNumber) VALUES (?,?)`,{
           replacements : [req.userData?.id, instituteRandomNumber]
         })
-        
-      req.instituteNumber = instituteRandomNumber
+
       next()
 
     }catch(err){
@@ -62,24 +61,65 @@ class InstituteController{
     }
   }
 
-  async createTeacher(req : ExtendRequest, res: Response, next : NextFunction){
-    const instituteNumber = req.instituteNumber
-    await sequelize.query(`CREATE TABLE teacher_${instituteNumber}(
-      id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-      teacherName VARCHAR(255),
-      teacherEmail VARCHAR(255) UNIQUE,
-      teacherAddress VARCHAR(255)
-    )`)
-
-    next()
+  async createTeacherTable(req : ExtendRequest, res: Response, next : NextFunction){
+    try{
+      const instituteNumber = req.userData?.instituteNumber
+      await sequelize.query(`CREATE TABLE teacher_${instituteNumber}(
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        teacherEmail VARCHAR(255) UNIQUE  NOT NULL,
+        teacherName VARCHAR(255)  NOT NULL,
+        teacherAddress VARCHAR(255)  NOT NULL,
+        teacherExperties VARCHAR(255) NOT NULL ,
+        joinDate DATE  NOT NULL,
+        salary VARCHAR(255)  NOT NULL,
+        createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )`)
+  
+      next()
+    }catch(err){
+      console.log("Error ",err)
+      res.status(500).json({
+        "message" : "Something went error in teacher table",
+        "error" : err
+      })
+    }
   }
 
-  async createStudent(req:ExtendRequest, res : Response){
-    const instituteNumber = req.instituteNumber
-    await sequelize.query(`CREATE TABLE student_${instituteNumber}(
+  async createStudentTable(req:ExtendRequest, res : Response, next : NextFunction){
+    try{
+      const instituteNumber = req.userData?.instituteNumber
+      await sequelize.query(`CREATE TABLE student_${instituteNumber}(
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        studentEmail VARCHAR(255) UNIQUE NOT NULL,
+        studentName VARCHAR(255) NOT NULL,
+        studentJoinDate DATE NOT NULL,
+        studentAddress TEXT NOT NULL,
+        studentImage VARCHAR(255),
+        createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )`)
+      next()
+    }catch(err){
+      console.log("Error ",err)
+      res.status(500).json({
+        "message" : "Something went error in student table",
+        "error" : err
+      })
+    }
+  }
+  async createCourseTable(req:ExtendRequest, res : Response){
+    const instituteNumber = req.userData?.instituteNumber
+    await sequelize.query(`CREATE TABLE course_${instituteNumber}(
       id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-      studentName VARCHAR(255),
-      studentEmail VARCHAR(255) UNIQUE
+      courseName VARCHAR(255) NOT NULL,
+      coursePrice VARCHAR(255) NOT NULL,
+      courseDuration VARCHAR(255) NOT NULL,
+      courseThumbnail VARCHAR(255),
+      courseDescription VARCHAR(255) NOT NULL,
+      courseLevel ENUM('beginner', 'intermediate','advance') NOT NULL,
+      createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )`)
     res.status(200).json({
       "message" : "institute created successfully"

@@ -2,9 +2,10 @@
 import express, { Router } from 'express'
 import instituteController from '../../controller/institute/instituteController.js'
 import middleware from '../../middleware/middleware.js'
+import errorHandling from '../../service/errorHandling.js'
 
 const router: Router = express.Router()
 
-router.route('/create-institute').post(middleware.isloggedIn,instituteController.createInstitute,instituteController.createTeacher, instituteController.createStudent)
+router.route('/institute').post(middleware.isloggedIn,instituteController.createInstituteTable,instituteController.createTeacherTable, instituteController.createStudentTable, errorHandling(instituteController.createCourseTable))
 
 export default router

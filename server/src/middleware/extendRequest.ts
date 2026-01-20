@@ -3,10 +3,7 @@ import type { Request } from "express"
 
 export interface ExtendRequest extends Request{
   userData ?: {
-    id: string,
-    username : string,
-    email : string,
-    role : string
+    id: string
+    instituteNumber ?: string |number
   },
-  instituteNumber ?: string |number
 }
