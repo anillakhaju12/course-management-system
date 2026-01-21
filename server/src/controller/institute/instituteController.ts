@@ -3,6 +3,7 @@ import sequelize from "../../database/connection.js";
 import instituteRandomNumberGenerator from "../../service/instituteRandomNumberGenerator.js";
 import type { ExtendRequest } from "../../middleware/extendRequest.js";
 import User from "../../database/models/userModel.js";
+import { catagorySeed } from "../../seed.js";
 
 
 
@@ -19,7 +20,7 @@ class InstituteController{
         })
       }
       await sequelize.query(`CREATE TABLE institute_${instituteRandomNumber} ( 
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
         instituteName VARCHAR(255) NOT NULL, 
         instituteEmail VARCHAR(255) NOT NULL UNIQUE, 
         institutePhoneNumber VARCHAR(255) NOT NULL, 
@@ -38,11 +39,15 @@ class InstituteController{
         //stote the instituteNumber which user is currently at in it's User Table
       if(req.userData){
         await User.update({currentInstituteNumber : instituteRandomNumber},{where : {id : req.userData.id}})
+
+        // update request memory for next middleware
+        req.userData.instituteNumber = instituteRandomNumber
+
       }
 
         //creating table to store the which user has how many institutes 
       await sequelize.query(`CREATE TABLE IF NOT EXISTS user_institute(
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
         userId VARCHAR(255) REFERENCES users(id),
         instituteNumber INT  NOT NULL
         )`) 
@@ -65,7 +70,7 @@ class InstituteController{
     try{
       const instituteNumber = req.userData?.instituteNumber
       await sequelize.query(`CREATE TABLE teacher_${instituteNumber}(
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
         teacherEmail VARCHAR(255) UNIQUE  NOT NULL,
         teacherName VARCHAR(255)  NOT NULL,
         teacherAddress VARCHAR(255)  NOT NULL,
@@ -90,7 +95,7 @@ class InstituteController{
     try{
       const instituteNumber = req.userData?.instituteNumber
       await sequelize.query(`CREATE TABLE student_${instituteNumber}(
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
         studentEmail VARCHAR(255) UNIQUE NOT NULL,
         studentName VARCHAR(255) NOT NULL,
         studentJoinDate DATE NOT NULL,
@@ -111,12 +116,13 @@ class InstituteController{
   async createCourseTable(req:ExtendRequest, res : Response){
     const instituteNumber = req.userData?.instituteNumber
     await sequelize.query(`CREATE TABLE course_${instituteNumber}(
-      id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-      courseName VARCHAR(255) NOT NULL,
+        id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
+      courseName VARCHAR(255) UNIQUE NOT NULL,
       coursePrice VARCHAR(255) NOT NULL,
       courseDuration VARCHAR(255) NOT NULL,
       courseThumbnail VARCHAR(255),
       courseDescription VARCHAR(255) NOT NULL,
+      catagoryId VARCHAR(31) NOT NULL REFERENCES catagory_${instituteNumber} (id),
       courseLevel ENUM('beginner', 'intermediate','advance') NOT NULL,
       createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -125,6 +131,25 @@ class InstituteController{
       "message" : "institute created successfully"
     })
   }
+  async createCatagoryTable(req: ExtendRequest, res:Response, next : NextFunction){
+    const instituteNumber = req.userData?.instituteNumber
+    
+    await sequelize.query(`CREATE TABLE IF NOT EXIST catagory_${instituteNumber}(
+      id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
+      catagoryName VARCHAR(255) NOT NULL,
+      catagoryDescription VARCHAR(255) NOT NULL,
+      createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
+      )`)
+      next()
+    catagorySeed.forEach(async (catagory)=>{
+      await sequelize.query(`INSERT INTO catagory_${instituteNumber}(
+        catagoryName, catagoryDescription) VALUES (?,?)`,{
+          replacements : [catagory.catagoryName, catagory.catagoryDescription]
+        })
+    })
+  }
 }
+
 
 export default new InstituteController()

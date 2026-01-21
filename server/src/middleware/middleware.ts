@@ -30,7 +30,7 @@ class Middleware{
         }
         req.userData = {
           id: user.id,
-          instituteNumber: user.currentInstituteNumber
+          instituteNumber : user.currentInstituteNumber
         }
         next()
       }
