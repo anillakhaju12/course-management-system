@@ -1,21 +1,23 @@
 import express from 'express'
 import envConfig from './config/configEnv.js'
 import './database/connection.js'
-import authRouter from './router/globals/auth/authRouter.js'
-import instituteRouter from './router/institute/instituteRouter.js'
-import courseRouter from './router/institute/course/courseRouter.js'
-import catagoryRouter from './router/institute/catagory/catagoryRouter.js'
+import authRoute from './router/globals/auth/authRoute.js'
+import instituteRoute from './router/institute/instituteRoute.js'
+import courseRoute from './router/institute/course/courseRoute.js'
+import catagoryRoute from './router/institute/catagory/catagoryRoute.js'
+import teacherRoute from './router/institute/teacher/teacherRoute.js'
 
 const app = express()
 
 const port = envConfig.portNumber
 
 app.use(express.json())
-app.use('/api',authRouter)
+app.use('/api',authRoute)
 
-app.use('/api',instituteRouter)
-app.use('/api', courseRouter)
-app.use('/api',catagoryRouter)
+app.use('/api',instituteRoute)
+app.use('/api/institute', courseRoute)
+app.use('/api/institute', catagoryRoute)
+app.use('./api/institute', teacherRoute)
 
 function startServer(){
   app.listen(port, ()=>{

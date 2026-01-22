@@ -1,4 +1,6 @@
 // configuration multer
+//this is for local storage
+
 
 import multer from "multer";
 import type { ExtendRequest } from "./extendRequest.js";
