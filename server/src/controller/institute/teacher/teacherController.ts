@@ -3,6 +3,7 @@ import type { ExtendRequest } from "../../../middleware/extendRequest.js";
 import sequelize from "../../../database/connection.js";
 import { QueryTypes } from "sequelize";
 import randomPasswordGenerator from "../../../service/randomPasswordGenerator.js";
+import sendMail from "../../../service/sendMailConfig.js";
 
 
 class TeacherController{
@@ -18,7 +19,7 @@ class TeacherController{
       })
     }
 
-    const {hashedVersion} = randomPasswordGenerator(teacherName)
+    const {hashedVersion, plainVersion} = randomPasswordGenerator(teacherName)
 
     await sequelize.query(`INSERT INTO teacher_${instituteNumber}(
       teacherName, teacherEmail, teacherAddress, teacherExperties, joinDate, salary, teacherPhoto, teacherPassword) VALUES (?,?,?,?,?,?,?)`,{
@@ -30,6 +31,15 @@ class TeacherController{
         type : QueryTypes.SELECT,
         replacements : [teacherEmail]
       })
+
+      // send mail to the teacher with email/password
+      const mailInfo = {
+        to : teacherEmail,
+        subject : 'Welcome to our platform',
+        text : `your Email : ${teacherEmail} and password : ${plainVersion}`
+      }
+
+      sendMail(mailInfo)
 
       await sequelize.query(`UPDATE course_${instituteNumber} SET teacherId = ? WHERE courseId = ?`,{
         type: QueryTypes.UPDATE,
