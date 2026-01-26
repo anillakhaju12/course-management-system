@@ -36,7 +36,9 @@ class TeacherController{
       const mailInfo = {
         to : teacherEmail,
         subject : 'Welcome to our platform',
-        text : `your Email : ${teacherEmail} and password : ${plainVersion}`
+        text : `your Email : ${teacherEmail} 
+                password : ${plainVersion}
+                institute Number : ${instituteNumber}`
       }
 
       sendMail(mailInfo)

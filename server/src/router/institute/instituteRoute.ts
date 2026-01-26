@@ -6,6 +6,6 @@ import errorHandling from '../../service/errorHandling.js'
 
 const router: Router = express.Router()
 
-router.route('/institute').post(middleware.isloggedIn,instituteController.createInstituteTable,instituteController.createTeacherTable, instituteController.createStudentTable,instituteController.createCatagoryTable, errorHandling(instituteController.createCourseTable))
+router.route('/').post(middleware.isloggedIn,instituteController.createInstituteTable,instituteController.createTeacherTable, instituteController.createStudentTable,instituteController.createCatagoryTable, errorHandling(instituteController.createCourseTable))
 
 export default router

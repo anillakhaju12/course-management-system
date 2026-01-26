@@ -3,6 +3,7 @@ import type {Request,Response} from "express"
 import User from "../../../database/models/userModel.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import generateJWTToken from "../../../service/generateJWTToken.js"
 
 class AuthController{
   
@@ -64,12 +65,12 @@ class AuthController{
           "message" : "User not registered"
         })
       }
-      const token = jwt.sign({id : user.id},"hithisissecretkey",{expiresIn: "90d"})
       const isPassword = bcrypt.compareSync(password, user.password)
       if(isPassword){
-          return res.status(200).json({
-            "message" : "login successfully",
-            "token" : token
+        const token = generateJWTToken({id : user.id})
+        return res.status(200).json({
+          "message" : "login successfully",
+          "token" : token
         })
       }else{
         return res.status(400).json({
