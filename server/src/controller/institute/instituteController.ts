@@ -115,43 +115,60 @@ class InstituteController{
       })
     }
   }
-  async createCourseTable(req:ExtendRequest, res : Response){
-    const instituteNumber = req.userData?.instituteNumber
-    await sequelize.query(`CREATE TABLE course_${instituteNumber}(
-        id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
-      courseName VARCHAR(255) UNIQUE NOT NULL,
-      coursePrice VARCHAR(255) NOT NULL,
-      courseDuration VARCHAR(255) NOT NULL,
-      courseThumbnail VARCHAR(255),
-      courseDescription VARCHAR(255) NOT NULL,
-      teacherId VARCHAR(255) REFERENCES teacher_${instituteNumber}(id),
-      catagoryId VARCHAR(31) NOT NULL REFERENCES catagory_${instituteNumber} (id),
-      courseLevel ENUM('beginner', 'intermediate','advance') NOT NULL,
-      createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMPsa
-    )`)
-    res.status(200).json({
-      "message" : "institute created successfully"
-    })
-  }
+
   async createCatagoryTable(req: ExtendRequest, res:Response, next : NextFunction){
     const instituteNumber = req.userData?.instituteNumber
-    
-    await sequelize.query(`CREATE TABLE IF NOT EXIST catagory_${instituteNumber}(
+    try{
+      await sequelize.query(`CREATE TABLE IF NOT EXISTS catagory_${instituteNumber}(
       id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
       catagoryName VARCHAR(255) NOT NULL,
       catagoryDescription VARCHAR(255) NOT NULL,
       createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
       )`)
-      next()
-    catagorySeed.forEach(async (catagory)=>{
-      await sequelize.query(`INSERT INTO catagory_${instituteNumber}(
-        catagoryName, catagoryDescription) VALUES (?,?)`,{
-          replacements : [catagory.catagoryName, catagory.catagoryDescription]
+      catagorySeed.forEach(async (catagory)=>{
+        await sequelize.query(`INSERT INTO catagory_${instituteNumber}(
+          catagoryName, catagoryDescription) VALUES (?,?)`,{
+            replacements : [catagory.catagoryName, catagory.catagoryDescription]
+          })
         })
-    })
+      next()
+    }catch(err){
+      console.log(err)
+      res.status(500).json({
+      "message" : "Server error! Try again"
+    })      
+    }
+   
   }
+  async createCourseTable(req:ExtendRequest, res : Response){
+    const instituteNumber = req.userData?.instituteNumber
+    try{
+      await sequelize.query(`CREATE TABLE course_${instituteNumber}(
+      id VARCHAR(31) PRIMARY KEY DEFAULT (UUID()),
+      courseName VARCHAR(255) UNIQUE NOT NULL,
+      coursePrice VARCHAR(255) NOT NULL,
+      courseDuration VARCHAR(255) NOT NULL,
+      courseThumbnail VARCHAR(255),
+      courseDescription VARCHAR(255) NOT NULL,
+      teacherId VARCHAR(255) REFERENCES teacher_${instituteNumber}(id),
+      catagoryId VARCHAR(50) NOT NULL REFERENCES catagory_${instituteNumber} (id),
+      courseLevel ENUM('beginner', 'intermediate','advance') NOT NULL,
+      createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )`)
+    res.status(200).json({
+      "message" : "institute created successfully"
+    })
+
+    }catch(err){
+      console.log(err)
+      res.status(500).json({
+      "message" : "Server error! Try again"
+    })
+    }
+
+  }  
 }
 
 

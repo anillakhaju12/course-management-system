@@ -1,12 +1,12 @@
 import express from 'express'
 import envConfig from './config/configEnv.js'
 import './database/connection.js'
-import authRoute from './router/globals/auth/authRoute.js'
-import instituteRoute from './router/institute/instituteRoute.js'
-import courseRoute from './router/institute/course/courseRoute.js'
-import catagoryRoute from './router/institute/catagory/catagoryRoute.js'
-import teacherInstituteRoute from './router/institute/teacher/teacherRoute.js'
-import teacherRoute from './router/teacher/teacherRoute.js'
+import authRoute from './route/globals/auth/authRoute.js'
+import instituteRoute from './route/institute/instituteRoute.js'
+import courseRoute from './route/institute/course/courseRoute.js'
+import catagoryRoute from './route/institute/catagory/catagoryRoute.js'
+import teacherInstituteRoute from './route/institute/teacher/teacherRoute.js'
+import teacherRoute from './route/teacher/teacherRoute.js'
 
 const app = express()
 

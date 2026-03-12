@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken'
 
 
 function generateJWTToken(userData : {
-  id : string, 
-  instituteNumber?: string
 }){
    const secretKey = process.env.TOKEN_SECRET_KEY
    const expriedTime =  process.env.TOKEN_EXPIRY_TIME

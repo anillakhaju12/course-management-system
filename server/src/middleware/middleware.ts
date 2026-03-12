@@ -14,7 +14,13 @@ class Middleware{
         "message" : "please provide the token"
       })
     }
-    jwt.verify(token, "hithisissecretkey",async (err, result : any)=>{
+    const secretKey = process.env.TOKEN_SECRET_KEY
+    if(!secretKey){
+      return res.status(500).json({
+        "message" : "Please try again"
+      })
+    }
+    jwt.verify(token, secretKey,async (err, result : any)=>{
       if(err){
         res.status(401).json({
           "message" : "Invalid token"
