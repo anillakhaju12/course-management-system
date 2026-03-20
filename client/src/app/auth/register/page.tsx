@@ -1,10 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from "react"
 import { IRegisterUser } from "./types"
+import { useAppDispatch } from "@/src/lib/store/customHooks"
+import { registerUser } from "@/src/lib/store/auth/authSlice"
+import { Status } from "@/src/lib/types/types"
 
 
 
-function registerUser(){
-
+function registerUserComponent(){
+  const dispatch = useAppDispatch()
   const[data,setData] = useState<IRegisterUser>({
     email : "",
     username : "",
@@ -19,7 +22,8 @@ function registerUser(){
   }
 
   const handleSubmissionData = (e:FormEvent<HTMLFormElement>)=>{
-    
+      dispatch(registerUser(data))
+      if(status === Status.SUCCESS){}
   }
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
@@ -86,4 +90,4 @@ function registerUser(){
   )
 }
 
-export default registerUser
+export default registerUserComponent

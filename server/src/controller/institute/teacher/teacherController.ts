@@ -10,21 +10,21 @@ class TeacherController{
 
   async createTeacher(req:ExtendRequest, res: Response){
     const instituteNumber = req.userData?.instituteNumber
-    const {teacherName, teacherEmail, teacherAddress, teacherExperties, teacherJoinedDate, teacherSalary, courseId} = req.body
+    const {teacherName, teacherEmail, teacherAddress, teacherExpertise, teacherJoinedDate, teacherSalary, courseId} = req.body
     const  teacherPhoto  = req.file?.path ?? `https://www.vecteezy.com/free-vector/anonymous-profile`
 
-    if(!teacherName || !teacherEmail || !teacherAddress || !teacherExperties || !teacherJoinedDate || !teacherSalary){
+    if(!teacherName || !teacherEmail || !teacherAddress || !teacherExpertise || !teacherJoinedDate || !teacherSalary){
       return res.status(400).json({
-        "message" : "please provide teacherName, teacherEmail, teacherAddress, teacherExperties, teacherJoinedDate, teacherSalary"
+        "message" : "please provide teacherName, teacherEmail, teacherAddress, teacherExpertise, teacherJoinedDate, teacherSalary"
       })
     }
 
     const {hashedVersion, plainVersion} = randomPasswordGenerator(teacherName)
 
     await sequelize.query(`INSERT INTO teacher_${instituteNumber}(
-      teacherName, teacherEmail, teacherAddress, teacherExperties, joinDate, salary, teacherPhoto, teacherPassword) VALUES (?,?,?,?,?,?,?)`,{
+      teacherName, teacherEmail, teacherAddress, teacherExpertise, joinDate, salary, teacherPhoto, teacherPassword) VALUES (?,?,?,?,?,?,?)`,{
         type : QueryTypes.INSERT,
-        replacements : [teacherName, teacherEmail, teacherAddress, teacherExperties, teacherJoinedDate, teacherSalary, teacherPhoto, hashedVersion]
+        replacements : [teacherName, teacherEmail, teacherAddress, teacherExpertise, teacherJoinedDate, teacherSalary, teacherPhoto, hashedVersion]
       })
 
       const teacherId : {id : string}[]  = await sequelize.query(`SELECT teacherId FROM teacher_${instituteNumber} WHERE teacherEmail = ?`,{
@@ -47,7 +47,7 @@ class TeacherController{
         type: QueryTypes.UPDATE,
         replacements : [teacherId[0]?.id, courseId]
       })
-      res.status(200).json({
+      res.status(201).json({
         "message" : "Teacher Created Successfully"
       })
 

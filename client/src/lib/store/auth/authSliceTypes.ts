@@ -1,8 +1,12 @@
 import { Status } from "../../types/types"
 
 export interface IUserData {
-  username : string, 
+  email : string, 
   password : string
+}
+
+export interface IRegisterData extends IUserData{
+  username : string
 }
 
 export interface IauthInitalData{

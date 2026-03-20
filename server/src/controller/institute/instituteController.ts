@@ -157,7 +157,7 @@ class InstituteController{
       createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )`)
-    res.status(200).json({
+    res.status(201).json({
       "message" : "institute created successfully"
     })
 

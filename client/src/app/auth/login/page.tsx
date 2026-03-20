@@ -1,26 +1,35 @@
-import { ChangeEvent, HtmlHTMLAttributes, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { IUserLoginData } from "./types";
+import { useAppDispatch } from "@/src/lib/store/customHooks";
+import { loginUser } from "@/src/lib/store/auth/authSlice";
+import { Status } from "@/src/lib/types/types";
 
 
 
-function loginUser() {
-const [data, setData] = useState<IUserLoginData>({
-  "email":"",
-  "password":""
-})
-const handleUserInputData = (e:ChangeEvent<HTMLInputElement>)=>{
-  const {name, value } = e.target
-  setData({
-    ...data,
-    [name] : value
+function loginUserComponent() {
+  const dispatch = useAppDispatch()
+  const [data, setData] = useState<IUserLoginData>({
+    "email":"",
+    "password":""
   })
-}
+  const handleUserInputData = (e:ChangeEvent<HTMLInputElement>)=>{
+    const {name, value } = e.target
+    setData({
+      ...data,
+      [name] : value
+    })
+  }
+    const handleSubmissionData = (e : FormEvent<HTMLFormElement>)=>{
+      dispatch(loginUser(data))
+      if(Status.SUCCESS){}
+    }
+ 
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
       <div className="w-full flex items-center justify-center">
         <div className="w-3/4 max-w-md p-8 bg-white shadow-lg rounded-lg">
           <h2 className="text-2xl font-bold text-blue-600 mb-6">Sign in</h2>
-          <form>            
+          <form onSubmit={handleSubmissionData}>            
             <div className="mb-4">
               <label className="block text-gray-700 text-sm mb-2">Email</label>
               <input
@@ -66,4 +75,6 @@ const handleUserInputData = (e:ChangeEvent<HTMLInputElement>)=>{
       </div>
     </div>
   );
-}
+ }
+
+export default loginUserComponent

@@ -22,7 +22,7 @@ const createCourse = async (req : ExtendRequest, res : Response)=>{
       type: QueryTypes.INSERT,
       replacements: [courseName, coursePrice, courseDuration, courseLevel, courseDescription, courseThumbnail,catagoryId]
     }).then(()=>{
-      res.status(200).json({
+      res.status(201).json({
         "message" : "Course added successfully"
       })
     }).catch(err=>{
