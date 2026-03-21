@@ -1,8 +1,10 @@
+"use client"
+
 import { ChangeEvent, FormEvent, useState } from "react";
 import { IUserLoginData } from "./types";
 import { useAppDispatch } from "@/src/lib/store/customHooks";
 import { loginUser } from "@/src/lib/store/auth/authSlice";
-import { Status } from "@/src/lib/types/types";
+// import { Status } from "@/src/lib/types/types";
 
 
 
@@ -12,6 +14,7 @@ function loginUserComponent() {
     "email":"",
     "password":""
   })
+ 
   const handleUserInputData = (e:ChangeEvent<HTMLInputElement>)=>{
     const {name, value } = e.target
     setData({
@@ -20,8 +23,10 @@ function loginUserComponent() {
     })
   }
     const handleSubmissionData = (e : FormEvent<HTMLFormElement>)=>{
+      e.preventDefault()
       dispatch(loginUser(data))
-      if(Status.SUCCESS){}
+      
+      // if(Status.SUCCESS){}
     }
  
   return (
@@ -54,7 +59,7 @@ function loginUserComponent() {
             </div>
 
             <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-              Sign in
+              Log in
             </button>
           </form>
           <button className="w-full mt-4 border border-gray-300 py-2 rounded-lg flex items-center justify-center hover:bg-gray-100 transition">

@@ -69,8 +69,11 @@ class AuthController{
       if(isPassword){
         const token = generateJWTToken({id : user.id})
         return res.status(200).json({
+          data : {
+            "token" : token,
+            "username" : user.username
+          },
           "message" : "login successfully",
-          "token" : token
         })
       }else{
         return res.status(400).json({

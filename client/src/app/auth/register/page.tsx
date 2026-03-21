@@ -1,8 +1,10 @@
+"use client"
+
 import { ChangeEvent, FormEvent, useState } from "react"
 import { IRegisterUser } from "./types"
 import { useAppDispatch } from "@/src/lib/store/customHooks"
 import { registerUser } from "@/src/lib/store/auth/authSlice"
-import { Status } from "@/src/lib/types/types"
+// import { Status } from "@/src/lib/types/types"
 
 
 
@@ -13,6 +15,7 @@ function registerUserComponent(){
     username : "",
     password : ""
   })
+   console.log(data)
 
   const handleUserInputData = (e:ChangeEvent<HTMLInputElement>)=>{
     const {name , value }= e.target
@@ -22,8 +25,9 @@ function registerUserComponent(){
   }
 
   const handleSubmissionData = (e:FormEvent<HTMLFormElement>)=>{
+      e.preventDefault()
       dispatch(registerUser(data))
-      if(status === Status.SUCCESS){}
+      // if(status === Status.SUCCESS){}
   }
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
@@ -62,15 +66,15 @@ function registerUserComponent(){
                 name="password"
                 onChange={handleUserInputData}
                 placeholder="Enter your password"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-              Sign up
+            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+              Register
             </button>
           </form>
-          <button className="w-full mt-4 border border-gray-300 py-2 rounded-lg flex items-center justify-center hover:bg-gray-100 transition">
+          <button className="w-full text-black mt-4 border border-gray-300 py-2 rounded-lg flex items-center justify-center  hover:bg-gray-100 transition">
             <img
               src="https://www.svgrepo.com/show/355037/google.svg"
               alt="Google"

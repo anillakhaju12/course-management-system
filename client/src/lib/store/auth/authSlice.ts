@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IauthInitalData, IRegisterData, IUserData } from "./authSliceTypes";
+import { IauthInitalData, ILoginData, IRegisterData, IUserData } from "./authSliceTypes";
 import { Status } from "../../types/types";
 import API from "../http/axiosInstanceCreation";
 import { AppDispatch } from "../store";
 
 const authInitialState: IauthInitalData = {
   user : {
-    email :"",
-    password : ""
+    token :"",
+    username : ""
   },
   status : Status.LOADING
 }
@@ -45,12 +45,14 @@ export function registerUser(data : IRegisterData){
   }
 }
 
-export function loginUser(data : IUserData){
+export function loginUser(data : ILoginData){
   return async function loginUserThunk(dispatch : AppDispatch){
     try{
       const response = await API.post("/auth/login", data)
       if(response.status === 200){
+        dispatch(setUser(response.data.data))
         dispatch(setStatus(Status.SUCCESS))
+        localStorage.setItem("token", response.data.data.token)
       }else{
         dispatch(setStatus(Status.ERROR))
       }

@@ -7,12 +7,17 @@ import courseRoute from './route/institute/course/courseRoute.js'
 import catagoryRoute from './route/institute/catagory/catagoryRoute.js'
 import teacherInstituteRoute from './route/institute/teacher/teacherRoute.js'
 import teacherRoute from './route/teacher/teacherRoute.js'
+import cors from "cors"
+
 
 const app = express()
 
 const port = envConfig.portNumber
 
 app.use(express.json())
+
+app.use(cors({origin: "http://localhost:3000"}))
+
 //GLOBAL ROUTE
 app.use('/api',authRoute)
 
