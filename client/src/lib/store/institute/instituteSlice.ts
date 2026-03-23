@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IInstituteData, IInstituteInitialData } from "./instituteSliceType";
 import { Status } from "../../types/types";
 import { AppDispatch } from "../store";
-import API from "../http/axiosInstanceCreation";
+import APIWithToken from "../http/APIWITHTOKEN";
 
 
 const instituteInitialData : IInstituteInitialData = {
@@ -11,8 +11,8 @@ const instituteInitialData : IInstituteInitialData = {
     instituteEmail: "", 
     institutePhoneNumber :"", 
     instituteAddress : "",
-    institutePanNumber : null,
-    instituteVatNumber : null
+    institutePanNumber : "",
+    instituteVatNumber : ""
   },
   status : Status.LOADING
 }
@@ -33,12 +33,12 @@ const instituteSlice = createSlice({
 
 const { setInstitute, setStatus} = instituteSlice.actions
 export default instituteSlice.reducer
-export {setInstitute, setStatus}
+
 
 export function  createInstitute(data : IInstituteData){
   return async function createInstituteThunk(dispatch : AppDispatch){
     try{
-      const response = await API.post("/institute",data)
+      const response = await APIWithToken.post("/institute",data)
       if(response.status === 201){
         dispatch(setStatus(Status.SUCCESS))
       }else{

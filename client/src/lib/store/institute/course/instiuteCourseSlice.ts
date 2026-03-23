@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { courseDifficultLevel, IInstituteCourseData, IInstituteCourseInitialData } from "./instituteCourseSliceType";
 import { Status } from "@/src/lib/types/types";
 import { AppDispatch } from "../../store";
-import API from "../../http/axiosInstanceCreation";
+import APIWithToken from "../../http/APIWITHTOKEN";
 
 const instituteCourseInitialData : IInstituteCourseInitialData =  {
   instituteCourses : [{
@@ -41,7 +41,7 @@ export default instituteCourseSlice.reducer
 export function createInstituteCourse(data : IInstituteCourseData){
   return async function createInstituteCourseThunk(dispatch : AppDispatch){
     try{ 
-      const response = await API.post("/institute/course", data)
+      const response = await APIWithToken.post("/institute/course", data)
       if(response.status === 201){
         dispatch(setStatus(Status.SUCCESS))
       }else{
@@ -58,7 +58,7 @@ export function createInstituteCourse(data : IInstituteCourseData){
 export function fetchAllInstituteCourse(){
   return async function fetchAllInstituteCourseThunk(dispatch : AppDispatch){
     try{ 
-      const response = await API.get("/institute/course")
+      const response = await APIWithToken.get("/institute/course")
       if(response.status === 200){
         dispatch(setStatus(Status.SUCCESS))
         response.data.data.length > 0 && dispatch(setInstituteCourse(response.data.data))
@@ -76,7 +76,7 @@ export function fetchAllInstituteCourse(){
 export function fetchSingleInstituteCourse(id : string){
   return async function fetchSingleInstituteCourseThunk(dispatch : AppDispatch){
     try{ 
-      const response = await API.get("/institute/course" + id)
+      const response = await APIWithToken.get("/institute/course" + id)
       if(response.status === 200){
         dispatch(setStatus(Status.SUCCESS))
         response.data.data.length > 0 && dispatch(setInstituteCourse(response.data.data))
@@ -93,7 +93,7 @@ export function fetchSingleInstituteCourse(id : string){
 export function deleteInstituteCourse(id : string){
   return async function deleteInstituteCourseThunk(dispatch : AppDispatch){
     try{ 
-      const response = await API.delete("/institute/course" + id)
+      const response = await APIWithToken.delete("/institute/course" + id)
       if(response.status === 200){
         dispatch(setStatus(Status.SUCCESS))
         dispatch(setDeleteCourse(id))

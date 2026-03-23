@@ -6,8 +6,8 @@ export interface IInstituteData  {
   instituteEmail : string, 
   institutePhoneNumber : string, 
   instituteAddress : string,
-  institutePanNumber : string | null,
-  instituteVatNumber : string | null
+  institutePanNumber ?: string,
+  instituteVatNumber ?: string
   
 }
 

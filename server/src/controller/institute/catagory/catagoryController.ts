@@ -17,7 +17,7 @@ class CataoryController{
         type : QueryTypes.INSERT,
         replacements :[catagoryName,catagoryDescription]
       })
-      res.status(200).json({
+      res.status(201).json({
         "message" : "Catagory add successfully"
       })
   }

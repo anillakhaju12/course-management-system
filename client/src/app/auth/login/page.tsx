@@ -1,6 +1,6 @@
 "use client"
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { IUserLoginData } from "./types";
 import { useAppDispatch } from "@/src/lib/store/customHooks";
 import { loginUser } from "@/src/lib/store/auth/authSlice";
@@ -22,7 +22,7 @@ function loginUserComponent() {
       [name] : value
     })
   }
-    const handleSubmissionData = (e : FormEvent<HTMLFormElement>)=>{
+    const handleSubmissionData = (e : React.FormEvent<HTMLFormElement>)=>{
       e.preventDefault()
       dispatch(loginUser(data))
       
@@ -33,7 +33,7 @@ function loginUserComponent() {
     <div className="flex justify-center items-center min-h-screen bg-white">
       <div className="w-full flex items-center justify-center">
         <div className="w-3/4 max-w-md p-8 bg-white shadow-lg rounded-lg">
-          <h2 className="text-2xl font-bold text-blue-600 mb-6">Sign in</h2>
+          <h2 className="text-2xl font-bold text-teal-600 mb-6">Sign in</h2>
           <form onSubmit={handleSubmissionData}>            
             <div className="mb-4">
               <label className="block text-gray-700 text-sm mb-2">Email</label>
@@ -58,11 +58,11 @@ function loginUserComponent() {
               />
             </div>
 
-            <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+            <button className="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition">
               Log in
             </button>
           </form>
-          <button className="w-full mt-4 border border-gray-300 py-2 rounded-lg flex items-center justify-center hover:bg-gray-100 transition">
+          <button className="w-full mt-4 border text-teal-600 border-gray-300 py-2 rounded-lg flex items-center justify-center hover:bg-gray-100 transition">
             <img
               src="https://www.svgrepo.com/show/355037/google.svg"
               alt="Google"
@@ -72,7 +72,7 @@ function loginUserComponent() {
           </button>
           <p className="mt-6 text-sm text-center text-gray-600">
             Already have an account?
-            <a href="/signin" className="text-blue-600 hover:underline">
+            <a href="/signin" className="text-teal-600 hover:underline">
               Sign in
             </a>
           </p>

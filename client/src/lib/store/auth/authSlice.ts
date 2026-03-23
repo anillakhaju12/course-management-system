@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IauthInitalData, ILoginData, IRegisterData, IUserData } from "./authSliceTypes";
 import { Status } from "../../types/types";
-import API from "../http/axiosInstanceCreation";
+import AuthAPI from "../http/AuthAPI";
 import { AppDispatch } from "../store";
 
 const authInitialState: IauthInitalData = {
@@ -32,7 +32,7 @@ export { setUser, setStatus}
 export function registerUser(data : IRegisterData){
   return async function registerUserThunk(dispatch : AppDispatch){
     try{
-      const response = await API.post("/auth/register", data)
+      const response = await AuthAPI.post("/auth/register", data)
       if(response.status === 201){
         dispatch(setStatus(Status.SUCCESS))
       }else{
@@ -48,7 +48,7 @@ export function registerUser(data : IRegisterData){
 export function loginUser(data : ILoginData){
   return async function loginUserThunk(dispatch : AppDispatch){
     try{
-      const response = await API.post("/auth/login", data)
+      const response = await AuthAPI.post("/auth/login", data)
       if(response.status === 200){
         dispatch(setUser(response.data.data))
         dispatch(setStatus(Status.SUCCESS))

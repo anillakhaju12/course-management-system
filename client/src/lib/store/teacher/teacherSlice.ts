@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ITeacher, ITeacherInitialData } from "./teacherSliceType";
 import { Status } from "../../types/types";
-import API from "../http/axiosInstanceCreation";
+import API from "../http/AuthAPI";
 import { AppDispatch } from "../store";
 
 const teacherInitialData : ITeacherInitialData = {
@@ -23,7 +23,7 @@ const teacherSlice = createSlice({
   }
 })
 
-export const {setTeacher, setStatus} = teacherSlice.actions
+const {setTeacher, setStatus} = teacherSlice.actions
 export default teacherSlice.reducer
 
 export function teacherLogin(data : ITeacher){

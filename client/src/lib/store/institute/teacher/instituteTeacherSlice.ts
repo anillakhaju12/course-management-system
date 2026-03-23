@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IInstituteTeacherData, IInstituteTeacherInitialData, teacherExpertiseLevel } from "./instituteTeacherSliceType";
 import { Status } from "@/src/lib/types/types";
 import { AppDispatch } from "../../store";
-import API from "../../http/axiosInstanceCreation";
+import APIWithToken from "../../http/APIWITHTOKEN";
 
 
 const instituteTeacherInitialData : IInstituteTeacherInitialData= {
@@ -40,7 +40,7 @@ export default instituteTeacherSlice.reducer
 export function createInstituteTeacher(data : IInstituteTeacherData){
   return async function createInstituteTeacherThunk(dispatch : AppDispatch){
     try{
-      const response = await API.post("/institute/teacher", data)
+      const response = await APIWithToken.post("/institute/teacher", data)
       if(response.status === 201){
         dispatch(setStatus(Status.SUCCESS))
       }else{
@@ -56,7 +56,7 @@ export function createInstituteTeacher(data : IInstituteTeacherData){
 export function fetchInstituteTeacher(){
   return async function fetchInstituteTeacherThunk(dispatch : AppDispatch){
     try{
-      const response = await API.get("/institute/teacher")
+      const response = await APIWithToken.get("/institute/teacher")
       if(response.status === 200){
         dispatch(setStatus(Status.SUCCESS))
         response.data.data.length > 0 && dispatch(setInstituteTeacher(response.data.data))
@@ -73,7 +73,7 @@ export function fetchInstituteTeacher(){
 export function deleteInstituteTeacher(id : string){
   return async function deleteInstituteTeacherThunk(dispatch : AppDispatch){
     try{
-      const response = await API.delete("/institute/teacher/" + id)
+      const response = await APIWithToken.delete("/institute/teacher/" + id)
       if(response.status === 200){
         dispatch(setStatus(Status.SUCCESS))
         //popout the data from the slice after deleting
