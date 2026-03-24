@@ -49,7 +49,7 @@ export function loginUser(data : ILoginData){
   return async function loginUserThunk(dispatch : AppDispatch){
     try{
       const response = await AuthAPI.post("/auth/login", data)
-      if(response.status === 200){
+      if(response.status == 200){
         dispatch(setUser(response.data.data))
         dispatch(setStatus(Status.SUCCESS))
         localStorage.setItem("token", response.data.data.token)

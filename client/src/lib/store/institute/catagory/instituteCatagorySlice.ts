@@ -23,18 +23,24 @@ const instituteCatagorySlice = createSlice({
     },
     setStatus(state : IInstituteCatagoryInitialData, action : PayloadAction<Status>){
       state.status = action.payload
+    },
+    setDeleteCatagory(state: IInstituteCatagoryInitialData, action : PayloadAction<string>){
+
+    },
+    setAddCatagory(state: IInstituteCatagoryInitialData, action : PayloadAction<IInstituteCatagoryData>){
+      
     }
     
   }
 })
 
-const {setCatagory, setStatus} = instituteCatagorySlice.actions
+const {setCatagory, setStatus,setDeleteCatagory,} = instituteCatagorySlice.actions
 export default instituteCatagorySlice.reducer
 
 export function createCatagory(data : IInstituteUserProvideCatagoryData){
   return async function createCatagoryThunk(dispatch : AppDispatch){
     try{
-      const response = await APIWithToken.post("/intitute/catagory",data)
+      const response = await APIWithToken.post("/institute/catagory",data)
       if(response.status == 201){
         dispatch(setStatus(Status.SUCCESS))
         
@@ -52,7 +58,7 @@ export function createCatagory(data : IInstituteUserProvideCatagoryData){
 export function fetchCatagory(){
   return async function fetchCatagoryThunk(dispatch : AppDispatch){
     try{
-      const response = await APIWithToken.get("/intitute/catagory")
+      const response = await APIWithToken.get("/institute/catagory")
       if(response.status == 200){
         dispatch(setStatus(Status.SUCCESS))
         response.data.data.length > 0 && dispatch(setCatagory(response.data.data))
