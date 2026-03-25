@@ -1,11 +1,13 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/customHooks";
-import { fetchCatagory } from "@/src/lib/store/institute/catagory/instituteCatagorySlice";
+import { deleteCatagory, fetchCatagory } from "@/src/lib/store/institute/catagory/instituteCatagorySlice";
 import { useEffect, useState } from "react";
 import AddCatagoryPopUp from "@/src/lib/components/addCatagoryPopUp"; 
+import { Status } from "@/src/lib/types/types";
 
 export default function InstituteCatagory() {
+  const {status} = useAppSelector((store)=> store.instituteCatagories)
   const [addCatagoryBoxOpen, setCatagoryBoxOpen] = useState<Boolean>(false);
   const { catagories } = useAppSelector((store) => store.instituteCatagories);
   const dispatch = useAppDispatch();
@@ -20,9 +22,13 @@ export default function InstituteCatagory() {
     setCatagoryBoxOpen(false);
   };
 
+  const handleDeleteCatagory = (id : string)=>{
+    dispatch(deleteCatagory(id))
+  }
+
   return (
     <div>
-      <AddCatagoryPopUp/>
+  {addCatagoryBoxOpen && <AddCatagoryPopUp closeAddCatagory = {closeAddCatagory}/> }
       <div className="flex flex-col">
         <div className=" overflow-x-auto">
           <div className="min-w-full inline-block align-middle">
@@ -74,7 +80,7 @@ export default function InstituteCatagory() {
             <div className="overflow-hidden ">
               <table className=" min-w-full rounded-xl">
                 <thead>
-                  <tr className="bg-gray-50">
+                  <tr  className="bg-gray-50">
                     <th
                       scope="col"
                       className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize rounded-t-xl"
@@ -128,7 +134,7 @@ export default function InstituteCatagory() {
 
                           <td className=" p-5 ">
                             <div className="flex items-center gap-1">
-                              <button className="p-2  rounded-full  group transition-all duration-500  flex item-center">
+                              <button  className="p-2  rounded-full  group transition-all duration-500  flex item-center">
                                 <svg
                                   className="cursor-pointer"
                                   width={20}
@@ -144,7 +150,7 @@ export default function InstituteCatagory() {
                                   />
                                 </svg>
                               </button>
-                              <button className="p-2 rounded-full  group transition-all duration-500  flex item-center">
+                              <button onClick={()=>handleDeleteCatagory(catagory?.id)} className="p-2 rounded-full  group transition-all duration-500  flex item-center">
                                 <svg
                                   width={20}
                                   height={20}

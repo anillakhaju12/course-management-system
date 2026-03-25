@@ -6,11 +6,7 @@ import APIWithToken from "../../http/APIWITHTOKEN";
 
 
 const catagoryInitialState : IInstituteCatagoryInitialData = {
-  catagories : [{
-    id : "",
-    catagoryName : "",
-    catagoryDescription : ""
-  }],
+  catagories : [],
   status : Status.LOADING
 }
 
@@ -25,16 +21,17 @@ const instituteCatagorySlice = createSlice({
       state.status = action.payload
     },
     setDeleteCatagory(state: IInstituteCatagoryInitialData, action : PayloadAction<string>){
-
+      const id = action.payload
+      state.catagories = state.catagories.filter((catagory) => catagory.id !== id)
     },
-    setAddCatagory(state: IInstituteCatagoryInitialData, action : PayloadAction<IInstituteCatagoryData>){
-      
+    setAddCatagory(state: IInstituteCatagoryInitialData, action : PayloadAction<IInstituteCatagoryData[]>){
+      state.catagories= action.payload
     }
     
   }
 })
 
-const {setCatagory, setStatus,setDeleteCatagory,} = instituteCatagorySlice.actions
+const {setCatagory, setStatus,setDeleteCatagory,setAddCatagory} = instituteCatagorySlice.actions
 export default instituteCatagorySlice.reducer
 
 export function createCatagory(data : IInstituteUserProvideCatagoryData){
@@ -43,7 +40,7 @@ export function createCatagory(data : IInstituteUserProvideCatagoryData){
       const response = await APIWithToken.post("/institute/catagory",data)
       if(response.status == 201){
         dispatch(setStatus(Status.SUCCESS))
-        
+        response.data.data.length > 0 && dispatch(setAddCatagory(response.data.data))
         
       }else{
         dispatch(setStatus(Status.ERROR))
@@ -75,9 +72,11 @@ export function fetchCatagory(){
 export function deleteCatagory(id: string){
   return async function deleteCatagoryThunk(dispatch : AppDispatch){
     try{
-      const response = await APIWithToken.delete("/intitute/catagory"+id)
+      const response = await APIWithToken.delete("/institute/catagory/"+id)
       if(response.status == 200){
         dispatch(setStatus(Status.SUCCESS))
+        dispatch(setDeleteCatagory(id))
+        
         
       }else{
         dispatch(setStatus(Status.ERROR))

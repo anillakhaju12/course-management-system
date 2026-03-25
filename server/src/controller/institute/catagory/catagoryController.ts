@@ -17,8 +17,13 @@ class CataoryController{
         type : QueryTypes.INSERT,
         replacements :[catagoryName,catagoryDescription]
       })
+      const data = await sequelize.query(`SELECT * FROM catagory_${instituteNumber}`,{
+        type : QueryTypes.SELECT,
+        replacements : []
+      })
       res.status(201).json({
-        "message" : "Catagory add successfully"
+        "message" : "Catagory add successfully",
+        data 
       })
   }
 
