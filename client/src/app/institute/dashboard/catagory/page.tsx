@@ -4,9 +4,10 @@ import { useAppDispatch, useAppSelector } from "@/src/lib/store/customHooks";
 import { deleteCatagory, fetchCatagory } from "@/src/lib/store/institute/catagory/instituteCatagorySlice";
 import { useEffect, useState } from "react";
 import AddCatagoryPopUp from "@/src/lib/components/addCatagoryPopUp"; 
-import { Status } from "@/src/lib/types/types";
+
 
 export default function InstituteCatagory() {
+  const [searchData, setSearchData] = useState<string>("")
   const {status} = useAppSelector((store)=> store.instituteCatagories)
   const [addCatagoryBoxOpen, setCatagoryBoxOpen] = useState<Boolean>(false);
   const { catagories } = useAppSelector((store) => store.instituteCatagories);
@@ -25,6 +26,8 @@ export default function InstituteCatagory() {
   const handleDeleteCatagory = (id : string)=>{
     dispatch(deleteCatagory(id))
   }
+
+  const filteredData = catagories.filter((catagory) => catagory.catagoryName.toLowerCase().includes(searchData.toLowerCase()))
 
   return (
     <div>
@@ -64,6 +67,7 @@ export default function InstituteCatagory() {
                   </svg>
                 </div>
                 <input
+                  onChange={(e)=>setSearchData(e.target.value) }
                   type="text"
                   id="default-search"
                   className="block w-80 h-11 pr-5 pl-12 py-2.5 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none"
@@ -112,8 +116,8 @@ export default function InstituteCatagory() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-300 ">
-                  {catagories.length > 0 &&
-                    catagories.map((catagory) => {
+                  {filteredData.length > 0 &&
+                    filteredData.map((catagory) => {
                       return (
                         <tr
                           key={catagory.id}
