@@ -24,8 +24,8 @@ const instituteCatagorySlice = createSlice({
       const id = action.payload
       state.catagories = state.catagories.filter((catagory) => catagory.id !== id)
     },
-    setAddCatagory(state: IInstituteCatagoryInitialData, action : PayloadAction<IInstituteCatagoryData[]>){
-      state.catagories= action.payload
+    setAddCatagory(state: IInstituteCatagoryInitialData, action : PayloadAction<IInstituteCatagoryData>){
+      state.catagories.push(action.payload)
     }
     
   }
@@ -40,7 +40,9 @@ export function createCatagory(data : IInstituteUserProvideCatagoryData){
       const response = await APIWithToken.post("/institute/catagory",data)
       if(response.status == 201){
         dispatch(setStatus(Status.SUCCESS))
-        response.data.data.length > 0 && dispatch(setAddCatagory(response.data.data))
+        // response.data.data.length > 0 && dispatch(setAddCatagory(response.data.data))
+        const newCatagory = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
+        dispatch(setAddCatagory(newCatagory))
         
       }else{
         dispatch(setStatus(Status.ERROR))
