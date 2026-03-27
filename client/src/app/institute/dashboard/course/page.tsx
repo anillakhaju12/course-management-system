@@ -1,3 +1,5 @@
+"use client"
+
 import AddCousrsePopUp from "@/src/lib/components/addCoursePopUp";
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/customHooks";
 import { deleteInstituteCourse } from "@/src/lib/store/institute/course/instiuteCourseSlice";
@@ -11,9 +13,9 @@ export default function InstituteCourse() {
   const {instituteCourses} = useAppSelector((store) => store.courses)
 
 
-  const openCreateCousrseBox = ()=>{
-    setIsAddCourseBoxOpen(true)
-  }
+    const openCreateCousrseBox = ()=>{
+      setIsAddCourseBoxOpen(true)
+    }
     const closeCreateCousrseBox = ()=>{
     setIsAddCourseBoxOpen(false)
   }

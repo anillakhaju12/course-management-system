@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../store/customHooks";
+import { fetchCatagory } from "../store/institute/catagory/instituteCatagorySlice";
 
 
 
 
 export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCousrseBox : ()=> void;} ){
+  const dispatch = useAppDispatch()
+  const {catagories} = useAppSelector(store => store.instituteCatagories)
+
+  const level = [
+    "Beginner",
+    "Intermediate",
+    "Advance"
+  ]
 
   const handleSubmissionData = (e : React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
@@ -13,6 +23,12 @@ export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCo
   const handleCourseInputData = (e : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
 
   }
+
+  useEffect(()=>{
+    if(catagories.length <=0){
+      dispatch(fetchCatagory())
+    }
+  },[catagories]) 
   return(
           <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
         {/* overlay */}
@@ -22,7 +38,7 @@ export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCo
         ></div>
         {/* Modal */}
         <div className="relative w-full cursor-pointer pointer-events-none transition my-auto p-4">
-          <div className="w-full scale-115 py-2 bg-white cursor-default pointer-events-auto dark:bg-white-800 relative rounded-xl mx-auto max-w-sm">
+          <div className="w-full py-2 bg-white cursor-default pointer-events-auto dark:bg-white-800 relative rounded-xl mx-auto max-w-sm">
             <button
               onClick={closeCreateCousrseBox}
               type="button"
@@ -50,7 +66,7 @@ export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCo
                   className="text-xl font-bold tracking-tight"
                   id="page-action.heading"
                 >
-                 Create Category
+                 Create Course
                 </h2>
               </div>
             </div>
@@ -73,9 +89,70 @@ export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCo
                       onChange={handleCourseInputData}
                       className="border p-3 shadow-md  border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full"
                       type="text"
-                      placeholder="Web development"
+                      placeholder="React, NextJs, NodeJs"
                       required
                     />
+                  </div>
+                  <div>
+                    <label className="mb-2 text-gray-400 text-lg">
+                      Price
+                      <span className="text-red-600 inline-block p-1 text-sm">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      name="coursePrice"
+                      onChange={handleCourseInputData}
+                      className="border p-3 shadow-md  border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full"
+                      type="text"
+                      placeholder="Rs.1999"
+                      required
+                    />
+                  </div>     
+                  <div>
+                    <label className="mb-2 text-gray-400 text-lg">
+                      Duration
+                      <span className="text-red-600 inline-block p-1 text-sm">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      name="courseDuration"
+                      onChange={handleCourseInputData}
+                      className="border p-3 shadow-md  border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full"
+                      type="text"
+                      placeholder="1 month"
+                      required
+                    />
+                  </div> 
+                  <div className="flex">
+
+                    <div>
+                      <label className="mb-2 ml-0.5 text-gray-400 text-lg">
+                        Level
+                        <span className="text-red-600 inline-block p-1 text-sm">
+                          *
+                        </span>
+                      </label>
+                      <select name="courseLevel" className="border p-3 shadow-md  border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full">
+                        {level && level.map(courseLevel =>
+                            <option key={courseLevel} value={courseLevel}>{courseLevel}</option>
+                        )}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="mb-2 text-gray-400 text-lg">
+                        Category
+                        <span className="text-red-600 inline-block p-1 text-sm">
+                          *
+                        </span>
+                      </label>
+                      <select name="catagoryId" className="border p-3 shadow-md  border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full">
+                        {catagories.length > 0 && catagories.map(catagories =>
+                            <option key={catagories.id} value={catagories.id}>{catagories.catagoryName}</option>
+                        )}
+                      </select>
+                    </div>                                                     
                   </div>
                   <div>
                     <label className="mb-2 text-gray-400 text-lg">
@@ -85,14 +162,29 @@ export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCo
                       </span>
                     </label>
                     <textarea
-                      name="CourseDescription"
+                      name="courseDescription"
                       onChange={handleCourseInputData}
                       className="border p-3  border-gray-700 shadow-md placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full"
-                      placeholder="Web development is ...."
+                      placeholder="This course contain..."
                       required
                       defaultValue={""}
                     />
                   </div>
+                  <div>
+                    <label className="mb-2 text-gray-400 text-lg">
+                      Thumbnail
+                      <span className="text-red-600 inline-block p-1 text-sm">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      name="courseThumbnail"
+                      onChange={handleCourseInputData}
+                      className="border p-3 shadow-md  border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full"
+                      type="file"
+                      required
+                    />
+                  </div>   
               <div className="px-6 py-2">
                 <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
                   <button

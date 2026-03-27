@@ -16,6 +16,7 @@ export interface IInstituteCourseData{
   courseLevel : courseDifficultLevel, 
   courseDescription : string, 
   catagoryId : string
+  courseThumbnail : File | null
 
 }
 

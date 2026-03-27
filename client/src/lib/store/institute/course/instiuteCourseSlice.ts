@@ -12,7 +12,8 @@ const instituteCourseInitialData : IInstituteCourseInitialData =  {
     coursePrice : "",
     courseDuration : "",
     courseLevel : courseDifficultLevel.BEGINNER,
-    catagoryId : ""
+    catagoryId : "",
+    courseThumbnail : null
   }],
   status : Status.LOADING
 
