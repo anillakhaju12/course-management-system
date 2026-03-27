@@ -9,7 +9,7 @@ import AddCatagoryPopUp from "@/src/lib/components/addCatagoryPopUp";
 export default function InstituteCatagory() {
   const [searchData, setSearchData] = useState<string>("")
   const {status} = useAppSelector((store)=> store.instituteCatagories)
-  const [addCatagoryBoxOpen, setCatagoryBoxOpen] = useState<Boolean>(false);
+  const [isaddCatagoryBoxOpen, setIsAddCatagoryBoxOpen] = useState<Boolean>(false);
   const { catagories } = useAppSelector((store) => store.instituteCatagories);
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -17,10 +17,10 @@ export default function InstituteCatagory() {
   }, []);
 
   const openAddCatagory = () => {
-    setCatagoryBoxOpen(true);
+    setIsAddCatagoryBoxOpen(true);
   };
   const closeAddCatagory = () => {
-    setCatagoryBoxOpen(false);
+    setIsAddCatagoryBoxOpen(false);
   };
 
   const handleDeleteCatagory = (id : string)=>{
@@ -31,7 +31,7 @@ export default function InstituteCatagory() {
 
   return (
     <div>
-  {addCatagoryBoxOpen && <AddCatagoryPopUp closeAddCatagory = {closeAddCatagory}/> }
+  {isaddCatagoryBoxOpen && <AddCatagoryPopUp closeAddCatagory = {closeAddCatagory}/> }
       <div className="flex flex-col">
         <div className=" overflow-x-auto">
           <div className="min-w-full inline-block align-middle">

@@ -1,41 +1,20 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store/customHooks";
-import { IInstituteUserProvideCatagoryData } from "../store/institute/catagory/instituteCatagorySliceType";
-import { createCatagory } from "../store/institute/catagory/instituteCatagorySlice";
-import { Status } from "../types/types";
+import React from "react";
 
-export default function AddCatagoryPopUp({
-  closeAddCatagory
-}: {
-  closeAddCatagory: () => void;
-}) {
-  const {status} = useAppSelector((store)=> store.instituteCatagories)
-  const dispatch = useAppDispatch();
-  const [data, setData] = useState<IInstituteUserProvideCatagoryData>({
-    catagoryName: "",
-    catagoryDescription: "",
-  });
-  console.log(data)
 
-  const handleCatagoryInputData = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
-  };
 
-  const handleSubmissionData = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await dispatch(createCatagory(data))
-    if(status === Status.SUCCESS){
-      closeAddCatagory()
-    }
-  };
 
-  return (
+export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCousrseBox : ()=> void;} ){
 
-      <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
+  const handleSubmissionData = (e : React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault()
+
+  }
+
+  const handleCourseInputData = (e : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
+
+  }
+  return(
+          <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
         {/* overlay */}
         <div
           aria-hidden="true"
@@ -45,7 +24,7 @@ export default function AddCatagoryPopUp({
         <div className="relative w-full cursor-pointer pointer-events-none transition my-auto p-4">
           <div className="w-full scale-115 py-2 bg-white cursor-default pointer-events-auto dark:bg-white-800 relative rounded-xl mx-auto max-w-sm">
             <button
-              onClick={closeAddCatagory}
+              onClick={closeCreateCousrseBox}
               type="button"
               className="absolute top-2 right-2 rtl:right-auto rtl:left-2"
             >
@@ -90,8 +69,8 @@ export default function AddCatagoryPopUp({
                       </span>
                     </label>
                     <input
-                      name="catagoryName"
-                      onChange={handleCatagoryInputData}
+                      name="courseName"
+                      onChange={handleCourseInputData}
                       className="border p-3 shadow-md  border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full"
                       type="text"
                       placeholder="Web development"
@@ -106,8 +85,8 @@ export default function AddCatagoryPopUp({
                       </span>
                     </label>
                     <textarea
-                      name="catagoryDescription"
-                      onChange={handleCatagoryInputData}
+                      name="CourseDescription"
+                      onChange={handleCourseInputData}
                       className="border p-3  border-gray-700 shadow-md placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg w-full"
                       placeholder="Web development is ...."
                       required
@@ -117,7 +96,7 @@ export default function AddCatagoryPopUp({
               <div className="px-6 py-2">
                 <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
                   <button
-                    onClick={closeAddCatagory}
+                    onClick={closeCreateCousrseBox}
                     type="button"
                     className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-9 px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-red-600 dark:hover:bg-red-800 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
                   >
@@ -140,5 +119,5 @@ export default function AddCatagoryPopUp({
           </div>
         </div>
       </div>
-  );
+  )
 }

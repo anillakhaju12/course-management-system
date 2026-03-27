@@ -6,6 +6,7 @@ import APIWithToken from "../../http/APIWITHTOKEN";
 
 const instituteCourseInitialData : IInstituteCourseInitialData =  {
   instituteCourses : [{
+    courseId : "",
     courseName : "",
     courseDescription : "",
     coursePrice : "",

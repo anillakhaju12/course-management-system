@@ -9,6 +9,7 @@ export enum courseDifficultLevel {
 }
 
 export interface IInstituteCourseData{
+  courseId : string,
   courseName : string, 
   coursePrice : string, 
   courseDuration : string, 
