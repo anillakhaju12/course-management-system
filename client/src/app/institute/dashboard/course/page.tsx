@@ -3,7 +3,8 @@
 import AddCousrsePopUp from "@/src/lib/components/addCoursePopUp";
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/customHooks";
 import { deleteInstituteCourse } from "@/src/lib/store/institute/course/instiuteCourseSlice";
-import { useState } from "react";
+import { Status } from "@/src/lib/types/types";
+import { useEffect, useState } from "react";
 
 
 export default function InstituteCourse() {
@@ -11,6 +12,7 @@ export default function InstituteCourse() {
   const [searchData, setSearchData] = useState<string>("")
   const [isAddCourseBoxOpen, setIsAddCourseBoxOpen] = useState<boolean>(false)
   const {instituteCourses} = useAppSelector((store) => store.courses)
+  const {status} = useAppSelector(store => store.courses)
 
 
     const openCreateCousrseBox = ()=>{
@@ -23,6 +25,12 @@ export default function InstituteCourse() {
   const handleDeleteCourse = (id : string)=>{
     dispatch(deleteInstituteCourse(id))
   }
+
+  useEffect(()=>{
+    if(status === Status.SUCCESS){
+      
+    }
+  },[status])
 
   const filteredData = instituteCourses.filter((course)=>course.courseName.includes(searchData))
   return (

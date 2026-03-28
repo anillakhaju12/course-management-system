@@ -8,8 +8,7 @@ export enum courseDifficultLevel {
   
 }
 
-export interface IInstituteCourseData{
-  courseId : string,
+export interface IInstituteCourseInputData{
   courseName : string, 
   coursePrice : string, 
   courseDuration : string, 
@@ -17,6 +16,11 @@ export interface IInstituteCourseData{
   courseDescription : string, 
   catagoryId : string
   courseThumbnail : File | null
+
+}
+
+export interface IInstituteCourseData extends IInstituteCourseInputData{
+  courseId : string,
 
 }
 

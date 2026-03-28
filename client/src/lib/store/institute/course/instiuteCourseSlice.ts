@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { courseDifficultLevel, IInstituteCourseData, IInstituteCourseInitialData } from "./instituteCourseSliceType";
+import { courseDifficultLevel, IInstituteCourseData, IInstituteCourseInitialData, IInstituteCourseInputData } from "./instituteCourseSliceType";
 import { Status } from "@/src/lib/types/types";
 import { AppDispatch } from "../../store";
 import APIWithToken from "../../http/APIWITHTOKEN";
@@ -40,12 +40,17 @@ const {setInstituteCourse, setStatus,setDeleteCourse} = instituteCourseSlice.act
 
 export default instituteCourseSlice.reducer
 
-export function createInstituteCourse(data : IInstituteCourseData){
+export function createInstituteCourse(data : IInstituteCourseInputData){
   return async function createInstituteCourseThunk(dispatch : AppDispatch){
     try{ 
-      const response = await APIWithToken.post("/institute/course", data)
+      const response = await APIWithToken.post("/institute/course", data,{
+        headers : {
+          "Content-Type" : "multipart/form-data"
+        }
+      })
       if(response.status === 201){
         dispatch(setStatus(Status.SUCCESS))
+        
       }else{
         dispatch(setStatus(Status.ERROR))
       }

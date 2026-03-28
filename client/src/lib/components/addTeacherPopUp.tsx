@@ -7,7 +7,7 @@ import { createInstituteCourse } from "../store/institute/course/instiuteCourseS
 
 
 
-export default function AddCousrsePopUp({closeCreateCousrseBox} : {closeCreateCousrseBox : ()=> void;} ){
+export default function AddTeacherPopUp({closeCreateCousrseBox} : {closeCreateCousrseBox : ()=> void;} ){
   const [data, setData] = useState<IInstituteCourseInputData>({
     courseName : "",
     catagoryId : "",

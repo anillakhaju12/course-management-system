@@ -5,32 +5,44 @@ import { QueryTypes } from "sequelize";
 
 
 const createCourse = async (req : ExtendRequest, res : Response)=>{
-  const {courseName, coursePrice, courseDuration, courseLevel, courseDescription, catagoryId} = req.body
-  const instituteNumber = req.userData?.instituteNumber
-  const courseThumbnail = req.file?.path
-  console.log(req.file)
+  try{
 
-  if(!courseName || !coursePrice || !courseDuration || !courseLevel || !courseDescription || !catagoryId){
-    return res.status(401).json({
-      "message" : "Please send courseName, coursePrice, courseDuration, courseLevel, courseDescription, catagoryId"
-    })
-  }
-  console.log(instituteNumber)
+    const {courseName, coursePrice, courseDuration, courseLevel, courseDescription, catagoryId} = req.body
+    const instituteNumber = req.userData?.instituteNumber
+    const courseThumbnail = req.file?.path
+    console.log(req.file)
   
-  await sequelize.query(`INSERT INTO course_${instituteNumber}(
-    courseName, coursePrice, courseDuration, courseLevel, courseDescription, courseThumbnail, catagoryId) VALUES (?,?,?,?,?,?)`, {
-      type: QueryTypes.INSERT,
-      replacements: [courseName, coursePrice, courseDuration, courseLevel, courseDescription, courseThumbnail,catagoryId]
-    }).then(()=>{
-      res.status(201).json({
-        "message" : "Course added successfully"
+    if(!courseName || !coursePrice || !courseDuration || !courseLevel || !courseDescription || !catagoryId){
+      return res.status(400).json({
+        "message" : "Please send courseName, coursePrice, courseDuration, courseLevel, courseDescription, catagoryId"
       })
-    }).catch(err=>{
-      console.log(err)
+    }
+    console.log(instituteNumber)
+    
+    const [result] : [unknown, number] = await sequelize.query(`INSERT INTO course_${instituteNumber}(
+      courseName, coursePrice, courseDuration, courseLevel, courseDescription, courseThumbnail, catagoryId) VALUES (?,?,?,?,?,?,?)`, {
+        type: QueryTypes.INSERT,
+        replacements: [courseName, coursePrice, courseDuration, courseLevel, courseDescription, courseThumbnail,catagoryId]
+      })
+    res.status(201).json({
+      "message" : "Course added successfully",
+      "data" : {
+        id : result,
+        courseName, 
+        coursePrice, 
+        courseDuration, 
+        courseLevel, 
+        courseDescription, 
+        courseThumbnail,
+        catagoryId
+      }
+        })
+      }
+    catch(err){
       res.status(500).json({
         "message" : "something went wrong!! Please try again"
       })
-    })
+    }
 }
 
 const getSingleCourse = async(req : ExtendRequest, res : Response)=>{

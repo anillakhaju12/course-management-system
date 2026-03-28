@@ -8,6 +8,15 @@ export interface ITeacher {
 }
 
 export interface ITeacherInitialData {
-  teacher : ITeacher,
+  teacher : ITeacher[],
   status : Status
+}
+
+export interface IteacherInputData extends ITeacher{
+  id : string,
+  teacherName : string,
+  teacherExperties : string,
+  joinDate : Date,
+  salary : string,
+  teacherPhoto : File | null
 }
